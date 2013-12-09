@@ -1,6 +1,6 @@
 class Board
   attr_accessor :piece, :board
-  attr_reader :theoretical_board
+  # attr_reader :board
 
   def initialize
     @board = Array.new(6) {Array.new(7, "   ")}
