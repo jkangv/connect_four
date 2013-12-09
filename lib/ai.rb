@@ -1,29 +1,23 @@
-require_relative 'board'
+require_relative 'all_classes'
 
 class AI
   attr_reader :piece, :name
-  attr_accessor :winning_move
+  attr_accessor :move
 
   def initialize(board,piece,player)
     @name = "AI"
     @piece = piece
     @board = board
     @player = player
+    @move = nil
   end
-
-  def ai_move(column)
-    @board.move(column)
-  end
-
 
   def winnable?
     winnable = false
-
-    @winning_move = nil
     column = 1
     until column == 8
       if @board.win_move?(column)
-        @winning_move = column
+        @move = column
         winnable = true
       end
       break if winnable
@@ -32,11 +26,31 @@ class AI
     winnable
   end
 
+  def must_block?
+    must_block = false
+    column = 1
+    @board.piece = self.piece == "X" ? "O" : "X"
+    until column == 8
+      if @board.win_move?(column)
+        @move = column
+        must_block = true
+      end
+      break if must_block
+      column += 1
+    end
+    @board.piece = self.piece
+    must_block
+  end
+
   def make_move
     if self.winnable?
-      self.ai_move(@winning_move)
+      @board.move(@move)
+    elsif self.must_block?
+      @board.move(@move)
     else
-      self.ai_move(rand(1..7))
+      @board.move(rand(1..7))
     end
   end
 end
+
+
