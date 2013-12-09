@@ -1,5 +1,6 @@
 class Board
   attr_accessor :piece, :board
+  # attr_reader :board
 
   def initialize
     @board = Array.new(6) {Array.new(7, "   ")}
@@ -27,6 +28,7 @@ class Board
         break
       end
     end
+    win?
   end
 
   def win?
