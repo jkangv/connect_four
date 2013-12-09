@@ -14,9 +14,9 @@ class AI
   attr_reader :piece, :name
   attr_accessor :winning_move
 
-  def initialize(board,player)
+  def initialize(board,piece,player)
     @name = "AI"
-    @piece = "X"
+    @piece = piece
     @board = board
     @player = player
   end
@@ -50,29 +50,3 @@ class AI
     end
   end
 end
-board = Board.new
-player = Player.new("Jihun", "O")
-ai = AI.new(board,player)
-
-puts "Here's the board!"
-puts board.display
-turn = 1
-until board.win? || turn == 43
-  if turn % 2 == 1
-    board.piece = player.piece
-    whose_turn = player
-    puts "Please choose a column (1~7) drop your piece, #{whose_turn.name} ( #{whose_turn.piece} ):"
-    column = gets.chomp.to_i
-    next if column > 7 || column < 1 || board.column_full?(column)
-    board.move(column)
-  else
-    puts "AI made its move:"
-    board.piece = ai.piece
-    whose_turn = ai
-    ai.make_move
-  end
-  puts board.display
-  turn += 1
-end
-puts "winner: #{whose_turn.name}" if board.win?
-puts "draw!" if turn == 43
