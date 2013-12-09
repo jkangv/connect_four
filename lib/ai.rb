@@ -29,7 +29,7 @@ class AI
   def must_block?
     must_block = false
     column = 1
-    @board.piece = self.piece == "X" ? "O" : "X"
+    @board.piece = @player.piece
     until column == 8
       if @board.win_move?(column)
         @move = column

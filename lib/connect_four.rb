@@ -1,28 +1,23 @@
 require_relative 'board'
 require_relative 'ai'
-
-class Player
-  attr_reader :name, :piece
-
-  def initialize(name, piece)
-    @name = name
-    @piece = piece
-  end
-end
+require_relative 'player'
 
 class ConnectFour
   attr_reader :player_1, :player_2
+  attr_writer :turn, :final_turn
+
   def initialize(board, player_1, player_2)
     @turn = 1
     @player_1 = player_1
     @player_2 = player_2
     @board = board
+    @final_turn = 43
   end
 
   def play_vs_human
     puts "Here's the board!"
     puts @board.display
-    until @board.win? || @turn == 43
+    until @board.win? || @turn == @final_turn
       if @turn % 2 == 1
         @board.piece = player_1.piece
         whose_turn = player_1
@@ -38,13 +33,13 @@ class ConnectFour
       @turn += 1
     end
     puts "winner: #{whose_turn.name}" if @board.win?
-    puts "draw!" if @turn == 43
+    puts "draw!" if @turn == @final_turn
   end
 
   def play_vs_ai
     puts "Here's the board!"
     puts @board.display
-    until @board.win? || @turn == 43
+    until @board.win? || @turn == @final_turn
       if @turn % 2 == 1
         @board.piece = player_1.piece
         whose_turn = player_1
@@ -62,7 +57,7 @@ class ConnectFour
       @turn += 1
     end
     puts "winner: #{whose_turn.name}" if @board.win?
-    puts "draw!" if @turn == 43
+    puts "draw!" if @turn == @final_turn
   end
 end
 
@@ -89,9 +84,10 @@ if answer == 1
   player_2 = Player.new(player_2_name,player_2_piece)
   puts
   puts
-  ConnectFour.new(board,player_1,player_2).play_vs_human
+  game = ConnectFour.new(board,player_1,player_2)
+  game.play_vs_human
 elsif answer == 2
-  puts "Hello, what is your name, player? You will get to go first."
+  puts "Hello, what is your name, player?"
   player_name = gets.chomp
   player_piece = ""
   until player_piece.upcase == "X" || player_piece.upcase == "O"
@@ -101,5 +97,17 @@ elsif answer == 2
   ai_piece = player_piece == "X" ? "O" : "X"
   player = Player.new(player_name, player_piece)
   ai = AI.new(board,ai_piece,player)
-  ConnectFour.new(board,player,ai).play_vs_ai
+  game = ConnectFour.new(board,player,ai)
+  answer_2 = ""
+  until answer_2 == "yes" or answer_2 == "no"
+    puts "Do you want to go first? (type yes/no)"
+    answer_2 = gets.chomp.downcase
+  end
+  if answer_2 == "yes"
+    game.play_vs_ai
+  elsif answer_2 == "no"
+    game.turn = 0
+    game.final_turn = 42
+    game.play_vs_ai
+  end
 end
