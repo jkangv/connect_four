@@ -47,9 +47,12 @@ class AI
       @board.move(@move)
     elsif self.must_block?
       @board.move(@move)
+    elsif @board.empty_board?
+      @board.move(4)
     else
       @board.move(rand(1..7))
     end
+    @move = nil
   end
 end
 

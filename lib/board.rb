@@ -28,6 +28,7 @@ class Board
         break
       end
     end
+    return "moved"
   end
 
   def win?
@@ -91,4 +92,11 @@ class Board
     end
     !column.include? ("   ")
   end
+
+  def empty_board?
+    empty_board = false
+    empty_board = true if @board.all? {|row| row.all? {|slot| slot == "   "}}
+    empty_board
+  end
+
 end
