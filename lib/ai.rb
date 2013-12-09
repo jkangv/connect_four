@@ -1,15 +1,5 @@
 require_relative 'board'
 
-class Player
-  attr_reader :name, :piece
-
-  def initialize(name, piece)
-    @name = name
-    @piece = piece
-  end
-end
-
-
 class AI
   attr_reader :piece, :name
   attr_accessor :winning_move
