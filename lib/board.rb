@@ -1,6 +1,6 @@
 class Board
   attr_accessor :piece, :board
-  # attr_reader :board
+  attr_reader :theoretical_board
 
   def initialize
     @board = Array.new(6) {Array.new(7, "   ")}
@@ -28,7 +28,6 @@ class Board
         break
       end
     end
-    win?
   end
 
   def win?
@@ -69,6 +68,21 @@ class Board
       break if win == true
     end
     win
+  end
+
+  def win_move?(column)
+    win_move = false
+    @board.reverse_each do |row|
+      if row[column-1] == "   "
+        row[column-1] = " #{@piece} "
+        if self.win?
+          win_move = true
+        end
+        row[column-1] = "   "
+        break
+      end
+    end
+    win_move
   end
 
   def column_full?(column_number)

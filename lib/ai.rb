@@ -12,6 +12,7 @@ end
 
 class AI
   attr_reader :piece, :name
+  attr_accessor :winning_move
 
   def initialize(board,player)
     @name = "AI"
@@ -29,35 +30,53 @@ class AI
   def winnable?
     winnable = false
 
-    # Horizontal winnable test
-    @board.board.each_index do |row|
-      next if @board.board[row].all? {|piece| piece == "   "}
-      possible_win_index = nil
-      @board.board[row].each_index do |index|
-        if @board.board[row][index..(index+2)].all? {|piece| piece == " X "}
-          possible_win_index = index
-        else
-          next
-        end
+    @winning_move = nil
+    column = 1
+    until column == 8
+      if @board.win_move?(column)
+        @winning_move = column
+        winnable = true
       end
-      next if possible_win_index == nil
-      puts possible_win_index
-      puts row
-      if possible_win_index == 0 || possible_win_index == 6
-        if @board.move(4) == true
-          winnable = true
-        end
-      else
-        if @board.board[row+1] == nil
-          winnable = true if @board.move(possible_win_index) == true || @board.move(possible_win_index+3) == true
-        elsif @board.board[row+1][possible_win_index-1] != "   "
-          winnable = true
-        elsif @board.board[row+1][possible_win_index+3] != "   "
-          winnable = true
-        end
-      end
-      break if winnable == true
+      break if winnable
+      column += 1
     end
+    # Horizontal winnable test
+    # @board.board.each_index do |row|
+    #   next if @board.board[row].all? {|piece| piece == "   "}
+    #   possible_win_index = nil
+    #   @winning_move = nil
+    #   @board.board[row].each_index do |index|
+    #     break if index > 4
+    #     if @board.board[row][index..(index+2)].all? {|piece| piece == " X "}
+    #       possible_win_index = index
+    #       break
+    #     else
+    #       next
+    #     end
+    #   end
+    #   next if possible_win_index == nil
+    #   if possible_win_index == 0 || possible_win_index == 6
+    #     if @board.move(4) == true
+    #       winnable = true
+    #       @winning_move = 4
+    #     end
+    #   elsif possible_win_index
+    #     if @board.board[row+1] == nil
+    #       if @board.move(possible_win_index) == true
+    #         @winning_move = possible_win_index
+    #       elsif @board.move(possible_win_index+3) == true
+    #         @winning_move = possible_win_index+3
+    #       end
+    #     elsif @board.board[row+1][possible_win_index-1] != "   "
+    #       winnable = true
+    #       @winning_move = possible_win_index
+    #     elsif @board.board[row+1][possible_win_index+3] != "   "
+    #       winnable = true
+    #       @winning_move = possible_win_index+3
+    #     end
+    #   end
+    #   break if winnable
+    # end
 
     winnable
   end
