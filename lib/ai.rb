@@ -9,6 +9,14 @@ class AI
     @move = nil
   end
 
+  def slots_remaining(column)
+    slots = 6
+    @board.board.reverse_each do |row|
+      slots -= 1 if row[column-1] != "   "
+    end
+    slots
+  end
+
   def win_move
     winnable = false
     column = 1
@@ -40,7 +48,7 @@ class AI
   end
 
   def calculate_move
-
+    @move
   end
 
   def initial_move

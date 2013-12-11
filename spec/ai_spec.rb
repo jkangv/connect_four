@@ -22,7 +22,7 @@ describe AI do
       [" O ", " O ", " O ", "   ", "   ", "   ", "   "],
       [" X ", " X ", " X ", "   ", "   ", "   ", "   "]
     ]
-    ai.winnable?.should eql(true)
+    ai.win_move.should eql(4)
   end
 
   it 'should know when ai can win with one more move with horizontal four in a row' do 
@@ -36,7 +36,7 @@ describe AI do
       [" O ", " O ", " O ", " X ", " X ", " O ", "   "],
       [" X ", " X ", " O ", " O ", " O ", " X ", "   "]
     ]
-    ai.winnable?.should eql(true)
+    ai.win_move.should eql(3)
   end
 
   it 'should know when ai can win with one more move with horizontal four in a row' do 
@@ -50,10 +50,10 @@ describe AI do
       [" O ", " O ", " O ", " X ", " X ", " O ", " X "],
       [" X ", " X ", " O ", " O ", " O ", " X ", " O "]
     ]
-    ai.winnable?.should eql(true)
+    ai.win_move.should eql(4)
   end
 
-  it 'should know when ai can win with one more move with horizontal four in a row' do 
+  it 'should know when ai can\'t win with one more move with horizontal four in a row' do 
     ai.opponent = player
     board.piece = "X"
     board.board = [
@@ -64,7 +64,7 @@ describe AI do
       [" O ", " O ", " O ", " X ", " X ", " O ", "   "],
       [" X ", " X ", " O ", " O ", " O ", " X ", "   "]
     ]
-    ai.winnable?.should eql(false)
+    ai.win_move.should eql(nil)
   end
 
   it 'should know to win by making a horizontal four in a row' do 
@@ -111,28 +111,6 @@ describe AI do
     ])
   end
 
-  it 'should drop its piece in column 4 if first player took column 4 as first move' do
-    ai.opponent = player
-    board.piece = "X"
-    board.board = [
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", " O ", "   ", "   ", "   "]
-    ]
-    ai.make_move
-    board.board.should eql([
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", " X ", "   ", "   ", "   "],
-      ["   ", "   ", "   ", " O ", "   ", "   ", "   "]
-    ])
-  end
-
   it 'should drop its piece in column 4 if first player didnt take column 4 as first move' do
     ai.opponent = player
     board.piece = "X"
@@ -153,5 +131,33 @@ describe AI do
       ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
       ["   ", " O ", "   ", " X ", "   ", "   ", "   "]
     ])
+  end
+
+  it 'should know how many empty slots are left in a column' do 
+    ai.opponent = player
+    board.piece = "X"
+    board.board = [
+      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
+      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
+      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
+      ["   ", " X ", "   ", "   ", "   ", "   ", "   "],
+      ["   ", " X ", "   ", "   ", "   ", "   ", "   "],
+      ["   ", " O ", "   ", "   ", "   ", "   ", "   "]
+    ]
+    ai.slots_remaining(2).should eql(3)
+  end
+
+   it 'should know how many empty slots are left in a column' do 
+    ai.opponent = player
+    board.piece = "X"
+    board.board = [
+      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
+      ["   ", "   ", "   ", "   ", "   ", "   ", "   "],
+      ["   ", "   ", "   ", " X ", "   ", "   ", "   "],
+      ["   ", " X ", "   ", " X ", "   ", "   ", "   "],
+      ["   ", " X ", "   ", " O ", "   ", "   ", "   "],
+      ["   ", " O ", "   ", " O ", "   ", "   ", "   "]
+    ]
+    ai.slots_remaining(4).should eql(2)
   end
 end
