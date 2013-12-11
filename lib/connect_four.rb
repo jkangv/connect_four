@@ -32,7 +32,7 @@ class ConnectFour
       puts @board.display
       @turn += 1
     end
-    puts "winner: #{whose_turn.name}" if @board.win?
+    puts "winner: #{whose_turn.name} ( #{whose_turn.piece} )" if @board.win?
     puts "draw!" if @turn == @final_turn
   end
 
@@ -48,23 +48,43 @@ class ConnectFour
         next if column > 7 || column < 1 || @board.column_full?(column)
         @board.move(column)
       else
-        puts "AI made its move:"
         @board.piece = player_2.piece
         whose_turn = player_2
+        puts "AI ( #{whose_turn.piece} ) made its move:"
         player_2.make_move
       end
       puts @board.display
       @turn += 1
     end
-    puts "winner: #{whose_turn.name}" if @board.win?
+    puts "winner: #{whose_turn.name} ( #{whose_turn.piece} )" if @board.win?
+    puts "draw!" if @turn == @final_turn
+  end
+
+  def ai_vs_ai
+    until @board.win? || @turn == @final_turn
+      if @turn % 2 == 1
+        @board.piece = player_1.piece
+        whose_turn = player_1
+        puts "AI 1 ( #{whose_turn.piece} ) made its move:"
+        player_1.make_move
+      else
+        @board.piece = player_2.piece
+        whose_turn = player_2
+        puts "AI 2 ( #{whose_turn.piece} ) made its move:"
+        player_2.make_move
+      end
+    puts @board.display
+    @turn += 1 
+    end
+    puts "winner: #{whose_turn.name} ( #{whose_turn.piece} )" if @board.win?
     puts "draw!" if @turn == @final_turn
   end
 end
 
 puts "Welcome to Connect Four Mini Game!"
 board = Board.new
-puts "Would you like to play Human vs Human (1) or Human vs AI (2) ?"
-puts "Please choose 1 or 2. If you choose anything else, program will end"
+puts "Would you like to play Human vs Human (1) or Human vs AI (2) or watch AI vs AI (3)?"
+puts "Please choose 1, 2, 3. If you choose anything else, program will end"
 answer = gets.chomp.to_i
 if answer == 1
   puts "Hello, what is your name, player 1? You will get to go first."
@@ -96,7 +116,8 @@ elsif answer == 2
   end
   ai_piece = player_piece == "X" ? "O" : "X"
   player = Player.new(player_name, player_piece)
-  ai = AI.new(board,ai_piece,player)
+  ai = AI.new(board,ai_piece)
+  ai.opponent = player
   game = ConnectFour.new(board,player,ai)
   answer_2 = ""
   until answer_2 == "yes" or answer_2 == "no"
@@ -110,4 +131,13 @@ elsif answer == 2
     game.final_turn = 42
     game.play_vs_ai
   end
+elsif answer == 3
+  ai_1 = AI.new(board, "X")
+  ai_2 = AI.new(board, "O")
+  ai_1.name = "AI 1"
+  ai_2.name = "AI 2"
+  ai_1.opponent = ai_2
+  ai_2.opponent = ai_1
+  game = ConnectFour.new(board,ai_1,ai_2)
+  game.ai_vs_ai 
 end
