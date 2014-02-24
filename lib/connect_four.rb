@@ -44,7 +44,6 @@ class ConnectFour
         @board.piece = player_1.piece
         whose_turn = player_1
         puts "Please choose a column (1~7) drop your piece, #{whose_turn.name} ( #{whose_turn.piece} ):"
-        puts
         column = gets.chomp.to_i
         next if column > 7 || column < 1 || @board.column_full?(column)
         @board.move(column)
@@ -52,7 +51,6 @@ class ConnectFour
         @board.piece = player_2.piece
         whose_turn = player_2
         puts "AI ( #{whose_turn.piece} ) made its move:"
-        puts
         player_2.make_move
       end
       puts @board.display
@@ -68,13 +66,11 @@ class ConnectFour
         @board.piece = player_1.piece
         whose_turn = player_1
         puts "AI 1 ( #{whose_turn.piece} ) made its move:"
-        puts
         player_1.make_move
       else
         @board.piece = player_2.piece
         whose_turn = player_2
         puts "AI 2 ( #{whose_turn.piece} ) made its move:"
-        puts
         player_2.make_move
       end
     puts @board.display
