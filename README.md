@@ -1,1 +1,2 @@
-Connect Four game in ruby. Right now working on the AI for this mini game.
+Connect Four game in ruby.
+This is the last project I was working on before I had to quit programming to help out my family.
